@@ -17,7 +17,7 @@ from swarms.finops_agent import run_finops_optimization
 from swarms.growthops_agent import run_growth_optimization
 
 # --- Configuration for OpenRouter (Free Tier Models) ---
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "sk-or-v1-demo")
+OPENROUTER_API_KEY = os.environ["OPENROUTER_API_KEY"]
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 # The Omni Architect (Meta-Controller)

@@ -1,56 +1,6 @@
 pipeline:
-  # ---------------------------------------------------------
-  # STEP 1: Build the Code
-  # ---------------------------------------------------------
-  build:
-    image: node:20
+  test:
+    image: rust:1.88
     commands:
-      - echo "Installing dependencies..."
-      - npm ci
-      - echo "Building project..."
-      - npm run build
-
-  # ---------------------------------------------------------
-  # STEP 2: The Test Generator Swarm
-  # (If tests are missing, generate them automatically)
-  # ---------------------------------------------------------
-  generate-tests:
-    image: python:3.11-slim
-    secrets: [ OPENROUTER_API_KEY ]
-    commands:
-      - echo "Checking coverage..."
-      - pip install -r orchestrator/requirements.txt
-      - python swarms/test_generator_agent.py
-
-  # ---------------------------------------------------------
-  # STEP 3: Mutation Testing (The Verification Shield)
-  # ---------------------------------------------------------
-  mutation-testing:
-    image: node:20
-    commands:
-      - echo "Running Stryker Mutation Tests..."
-      # If mutation score < 80%, this fails the pipeline
-      - npx stryker run 
-
-  # ---------------------------------------------------------
-  # STEP 4: The SecOps Gate
-  # ---------------------------------------------------------
-  secops-scan:
-    image: python:3.11-slim
-    secrets: [ OPENROUTER_API_KEY ]
-    commands:
-      - echo "Scanning PR Diff for vulnerabilities..."
-      - pip install -r orchestrator/requirements.txt
-      - python swarms/secops_gate.py
-
-  # ---------------------------------------------------------
-  # STEP 5: Notify the Omni Architect
-  # ---------------------------------------------------------
-  notify-orchestrator:
-    image: curlimages/curl
-    secrets: [ ORCHESTRATOR_WEBHOOK ]
-    commands:
-      - echo "Pipeline Passed. Triggering LangGraph Merge Node."
-      - curl -X POST $ORCHESTRATOR_WEBHOOK -d '{"ci_status": "pass"}'
-    when:
-      status: [ success ]
+      - cargo test --release --locked
+      - python3 -m pytest -q tests/oracle/test_routing_contract.py

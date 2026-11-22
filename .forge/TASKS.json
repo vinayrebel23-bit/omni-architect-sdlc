@@ -1,0 +1,43 @@
+{
+  "repo": "omni-architect-sdlc",
+  "baseline": "1d7f67ad80d1",
+  "oracle": "workspace/oracles/omni-architect-sdlc/routing-contract",
+  "nodes": [
+    {
+      "id": "oa-s1-route",
+      "tier": "S1",
+      "title": "Pure routing table matching the locked oracle",
+      "seam_target": "route",
+      "max_tokens": 40000,
+      "depends_on": [],
+      "done_when": "Locked oracle passes. No model client is constructed."
+    },
+    {
+      "id": "oa-s1-verify",
+      "tier": "S1",
+      "title": "Verifier returns fail when the command exits non-zero",
+      "seam_target": "verify",
+      "max_tokens": 40000,
+      "depends_on": ["oa-s1-route"],
+      "done_when": "A fixture command that exits 1 yields ci_status fail. The mock pass at orchestrator/main.py:113 is gone from the production path."
+    },
+    {
+      "id": "oa-s1-secrets",
+      "tier": "S1",
+      "title": "Startup fails closed without credentials",
+      "seam_target": "config",
+      "max_tokens": 30000,
+      "depends_on": [],
+      "done_when": "Process exits non-zero when OPENROUTER_API_KEY is unset. No default string is compiled in."
+    },
+    {
+      "id": "oa-s2-dst",
+      "tier": "S2",
+      "title": "DST sweep of at least 16 seeds before any network verifier",
+      "seam_target": "verify",
+      "max_tokens": 80000,
+      "depends_on": ["oa-s1-verify"],
+      "done_when": "FORGE_DST_SEED=0..16 is locked and passes with zero external sockets. Required because this repo has network and state-machine I/O."
+    }
+  ]
+}

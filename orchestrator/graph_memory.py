@@ -4,10 +4,15 @@ import os
 class EpistemicGraphMemory:
     def __init__(self):
         # Connect to the local Neo4j Docker container
-        uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-        user = os.getenv("NEO4J_USER", "neo4j")
-        password = os.getenv("NEO4J_PASSWORD", "omnipassword123")
-        
+        uri = os.getenv("NEO4J_URI")
+        user = os.getenv("NEO4J_USER")
+        password = os.getenv("NEO4J_PASSWORD")
+        if not uri or not user or not password:
+            print("[!] Neo4j credentials are unset. Refusing to use a default password.")
+            self.connected = False
+            self.driver = None
+            return
+
         try:
             self.driver = GraphDatabase.driver(uri, auth=(user, password))
             self.connected = True

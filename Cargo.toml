@@ -1,0 +1,19 @@
+[package]
+name = "omni-architect"
+version = "0.1.0"
+edition = "2024"
+description = "Native ticket router and local CI verifier"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+signal-hook = { version = "0.3", features = ["iterator"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true
