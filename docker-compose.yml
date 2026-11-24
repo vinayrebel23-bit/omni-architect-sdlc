@@ -28,7 +28,7 @@ services:
       - WOODPECKER_HOST=http://woodpecker-server:8000
       - WOODPECKER_GITEA=true
       - WOODPECKER_GITEA_URL=http://gitea:3000
-      - WOODPECKER_AGENT_SECRET=omni_architect_secret_key
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET:?WOODPECKER_AGENT_SECRET is required}
     ports:
       - "8008:8000"
     volumes:
@@ -41,7 +41,7 @@ services:
     container_name: omni-woodpecker-agent
     environment:
       - WOODPECKER_SERVER=woodpecker-server:9000
-      - WOODPECKER_AGENT_SECRET=omni_architect_secret_key
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET:?WOODPECKER_AGENT_SECRET is required}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
@@ -72,7 +72,7 @@ services:
     container_name: omni-neo4j
     restart: always
     environment:
-      - NEO4J_AUTH=neo4j/omnipassword123
+      - NEO4J_AUTH=${NEO4J_AUTH:?NEO4J_AUTH is required}
     ports:
       - "7474:7474" # HTTP
       - "7687:7687" # Bolt

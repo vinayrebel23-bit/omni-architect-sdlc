@@ -1,0 +1,7 @@
+{
+  "oracle_dir": "/data/data/com.termux/files/home/omniforge-v5/workspace/oracles/omni-architect-sdlc/routing-contract",
+  "files": {
+    "test_routing_contract.py": "07ee90c13630cd2223bcb29dd193839487cbc2fcbd5751a35a18e0aafd4b7bef"
+  },
+  "note": "Lock lives outside this worktree. Do not edit the oracle copy."
+}

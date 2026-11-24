@@ -1,0 +1,8 @@
+# Termux host adapter. cc-rs emits --target=aarch64-linux-android (no API
+# level); bionic headers then reject the unversioned triple. This does not
+# change router logic. See /usr/include/sys/cdefs.h.
+[env]
+CC_aarch64_linux_android = "clang"
+AR_aarch64_linux_android = "llvm-ar"
+HOST_CC = "clang"
+CFLAGS_aarch64_linux_android = "-D__ANDROID_MIN_SDK_VERSION__=24"
